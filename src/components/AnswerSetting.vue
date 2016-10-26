@@ -1,67 +1,132 @@
 <template>
-	<div>
+	<div class="container-fluid container-limited">
 		<div v-if="checkPermission(['manager'])">
 			<ol class="breadcrumb">
 				<li><a v-link="{ path: '/admin/ExamManagement/Subject' }">题目类型</a></li>
 				<li><a v-link="{ path: '/admin/ExamManagement/Subject/'+$route.params.subject }">{{$route.params.subject}}</a></li>
 				<li class="active">答案管理</li>
 			</ol>
-			<div class="container-fluid container-limited">
+			<div>
 				<h4>{{question.content}}</h4>
-                <bs-input label="正确答案" :value.sync="question.answer_correct.answer_detail.value" type="text">
-					<span slot="before" class="input-group-btn">
-                        <button class="btn btn-default">保存更改</button>
-                    </span>
-				</bs-input>
-				<vue-strap-table :has-filter="false" :data="worngData" :columns="wrong.columns"></vue-strap-table>
+				<table class="table table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>
+								答案
+							</th>
+							<th>
+								正确
+							</th>
+							<th>
+								操作
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="row of question.answers">
+							<td>
+								<div v-if="row.type=='img'">
+									<img style="width:200px" src="{{'/service/private/upload/getAttachment?id=' + row.value}}" />
+								</div>
+								<div v-else>
+									{{ row.value }}
+								</div>
+							</td>
+							<td>
+								{{ row.right?'是':'否' }}
+							</td>
+							<td>
+								<button class="btn btn-default btn-xs">修改</button>
+								<button class="btn btn-default btn-xs">删除</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4">
+								<button @click="addAnswer" class="btn btn-default btn-xs">添加</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
+			<modal :show.sync="showAnswerModel" effect="fade" width="400">
+				<div slot="modal-header" class="modal-header">
+					<h4 class="modal-title">
+						答案
+					</h4>
+				</div>
+				<div slot="modal-body" class="modal-body">
+					<alert :type="alertType">
+						{{alertText}}
+					</alert>
+					<div class="form-group">
+						<label class="control-label">答案类型:</label>
+						<v-select :value.sync="submitData.type" clear-button>
+							<v-option value="string">文字</v-option>
+							<v-option value="img">图片</v-option>
+						</v-select>
+					</div>
+					<bs-input v-if="submitData.type=='string'" :value.sync="submitData.value" label="答案"></bs-input>
+					<div v-if="submitData.type=='img'">
+						<vue-strap-upload :file-id.sync="submitData.value"></vue-strap-upload>
+					</div>
+				</div>
+				<div slot="modal-footer" class="modal-footer">
+					<button type="button" class="btn btn-default" @click="showAnswerModel=false">关闭</button>
+					<button :disabled="submitting" type="button" class="btn btn-success" @click="submitAnswer">确认</button>
+				</div>
+			</modal>
 		</div>
 	</div>
 </template>
 <script>
     import manager from '../api/manager'
     import checkPermission from '../extend/check-permission'
-    import VueStrapTable from './extend/vue-strap-table'
+    import VueStrapUpload from './extend/vue-strap-upload'
     import {
-        input as bsInput
+        spinner,
+        modal,
+        alert,
+        input as bsInput,
+        select as vSelect,
+        option as vOption
     } from 'vue-strap'
 
     export default {
         components: {
-            VueStrapTable,
-            bsInput
+            spinner,
+            modal,
+            alert,
+            bsInput,
+            vSelect,
+            vOption,
+            VueStrapUpload
         },
         data() {
             return {
                 question: {},
-                wrong: {
-                    columns: [{
-                        "header": "错误答案",
-                        "bind": "text"
-                    }, {
-                        "header": "操作",
-                        "type": "action",
-                        "items": [{
-                            eventName: "edit",
-                            tag: "button",
-                            class: "btn-xs",
-                            text: "编辑"
-                        }, {
-                            eventName: "delete",
-                            tag: "button",
-                            class: "btn-xs",
-                            text: "删除"
-                        }]
-                    }]
-                }
+                submitData: {
+                    id: undefined,
+                    type: "",
+                    value: "",
+                    right: false
+                },
+                showAnswerModel: false,
+                serverMsg: ""
             }
         },
         computed: {
-            worngData() {
-                return {
-                    end: true,
-                    list: this.question.answer_wrongs
+            alertType() {
+                return this.valid() ? "success" : "warning"
+            },
+            alertText() {
+                if (this.serverMsg) {
+                    return this.serverMsg;
                 }
+                let returnText = "please login";
+                if (!this.valid()) {
+                    returnText = "请填入数据"
+                }
+                return returnText
             }
         },
         methods: {
@@ -75,6 +140,15 @@
                 }).catch((err) => {
                     window.alert(err)
                 })
+            },
+            submitAnswer() {
+
+            },
+            addAnswer() {
+                this.showAnswerModel = true
+            },
+            valid() {
+
             }
         },
         ready() {

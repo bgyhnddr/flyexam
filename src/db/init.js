@@ -14,10 +14,9 @@ module.exports = function(req, res, next) {
         require('./models/question'),
         require('./models/answer')
     ].map((o) => o.sync({ force: true }))).then(function() {
-        return Promise.all([
-            require('./init_data')(),
-            require('./init_app_data')()
-        ])
+        return require('./init_data')()
+    }).then(() => {
+        return require('./init_app_data')()
     }).then(function() {
         res.send("success")
     }).catch(function(err) {

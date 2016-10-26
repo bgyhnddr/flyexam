@@ -27,5 +27,8 @@ export default {
     },
     getQuestionAnswers(params) {
         return request.get(path + 'getQuestionAnswers', params)
+    },
+    submitAnswer(params) {
+        return request.post(path + 'submitAnswer', params)
     }
 }

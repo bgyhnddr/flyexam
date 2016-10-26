@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container-fluid container-limited">
 		<div v-if="checkPermission(['manager'])">
 			<ol class="breadcrumb">
 				<li><a v-link="{ path: '/admin/ExamManagement/Subject' }">题目类型</a></li>

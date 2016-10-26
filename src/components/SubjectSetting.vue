@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container-fluid container-limited">
 		<div v-if="checkPermission(['manager'])">
 			<button @click="addSubject" class="btn btn-default">添加题类</button>
 			<div style="position:relative">
