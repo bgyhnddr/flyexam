@@ -52,6 +52,11 @@ export function configRouter(router) {
                             component: function(resolve) {
                                 require(['../components/AnswerSetting.vue'], resolve)
                             }
+                        },
+                        'Topic': {
+                            component: function(resolve) {
+                                require(['../components/TopicSetting.vue'], resolve)
+                            }
                         }
                     }
                 }

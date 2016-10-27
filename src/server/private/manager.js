@@ -172,7 +172,8 @@ var exec = {
             include: answer,
             where: {
                 id: req.query.id
-            }
+            },
+            order: 'right DESC'
         }).then((result) => {
             return result
         })
@@ -180,6 +181,21 @@ var exec = {
     submitAnswer(req, res, next) {
         var answer = require("../../db/models/answer")
         return answer.upsert(req.body)
+    },
+    getExams(req, res, next) {
+        var exam = require("../../db/models/exam")
+        var exam_subject = require("../../db/models/exam_subject")
+        var subject = require("../../db/models/subject")
+
+        exam.hasMany(exam_subject)
+        exam_subject.belongsTo(subject)
+
+        return exam.findAll({
+            include: {
+                model: exam_subject,
+                include: subject
+            }
+        })
     }
 }
 

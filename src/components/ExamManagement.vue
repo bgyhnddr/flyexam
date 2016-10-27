@@ -6,6 +6,9 @@
 				<li>
 					<a v-link="{ path: '/admin/ExamManagement/Subject' }">题目管理</a>
 				</li>
+				<li>
+					<a v-link="{ path: '/admin/ExamManagement/Topic' }">考试类型管理</a>
+				</li>
 			</navbar>
 			<router-view class="view" transition="fate" transition-mode="out-in"></router-view>
 		</div>

@@ -30,5 +30,8 @@ export default {
     },
     submitAnswer(params) {
         return request.post(path + 'submitAnswer', params)
+    },
+    getExams(params) {
+        return request.get(path + 'getExams', params)
     }
 }

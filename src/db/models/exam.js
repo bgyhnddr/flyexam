@@ -6,8 +6,6 @@ var exam = sequelize.define(
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         name: { type: Sequelize.STRING, unique: true },
         time_limit: Sequelize.INTEGER,
-        total_score: Sequelize.INTEGER,
-        total_question: Sequelize.INTEGER,
         comments: Sequelize.STRING
     }, {
         underscored: true

@@ -6,6 +6,8 @@ var role = require('./models/role')
 var permission = require('./models/permission')
 var user_role = require('./models/user_role')
 var role_permission = require('./models/role_permission')
+var exam = require('./models/exam')
+var exam_subject = require('./models/exam_subject')
 
 module.exports = function() {
     return Promise.all([
@@ -22,6 +24,12 @@ module.exports = function() {
         permission.create({ code: "manager", name: "manager" }),
         permission.create({ code: "upload", name: "upload" }),
         role_permission.create({ role_code: "manager", permission_code: "manager" }),
-        role_permission.create({ role_code: "manager", permission_code: "upload" })
+        role_permission.create({ role_code: "manager", permission_code: "upload" }),
+        exam.create({ name: "世界战争史", time_limit: 60, comments: "满分100,60分合格" }),
+        exam_subject.create({ exam_id: 1, subject_id: 1, question_count: 60 }),
+        exam_subject.create({ exam_id: 1, subject_id: 2, question_count: 40 }),
+        exam.create({ name: "世界历史", time_limit: 60, comments: "满分100,60分合格" }),
+        exam_subject.create({ exam_id: 2, subject_id: 1, question_count: 60 }),
+        exam_subject.create({ exam_id: 2, subject_id: 2, question_count: 40 })
     ])
 }
