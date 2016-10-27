@@ -1,52 +1,54 @@
 <template>
-    <div v-if="checkPermission()">
-        <button @click="addRolePermission" class="btn btn-default">add role-permission</button>
-        <div style="position:relative">
-            <spinner size="md" text="loading..."></spinner>
-            <vue-strap-table :err-msg.sync="errMsg" :data.sync="data" :get-data-event="getData" :columns.sync="columns"></vue-strap-table>
-        </div>
-        <div :class="{'in':showRolePermissionModel}" class="modal fade" :style="{zIndex:(showRolePermissionModel?undefined:-1)}"
-            style="display:block;overflow-y:auto;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            role-permission
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <label>{{submitData.permission_name}}</label>
-                        <button type="button" class="btn btn-default" @click="showPermissionModel=true">choose permission</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" @click="showRolePermissionModel=false">close</button>
-                        <button :disabled="submitting" type="button" class="btn btn-success" @click="submitRolePermission">confirm</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <div :class="{'in':showPermissionModel}" class="modal fade" :style="{zIndex:(showPermissionModel?undefined:-1)}" style="display:block;overflow-y:auto;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            add permission
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <permission-setting :selectable="selectable"></permission-setting>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" @click="showPermissionModel=false">close</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
+	<div class="container-fluid container-limited">
+		<div v-if="checkPermission()">
+			<button @click="addRolePermission" class="btn btn-default">add role-permission</button>
+			<div style="position:relative">
+				<spinner size="md" text="loading..."></spinner>
+				<vue-strap-table :err-msg.sync="errMsg" :data.sync="data" :get-data-event="getData" :columns.sync="columns"></vue-strap-table>
+			</div>
+			<div :class="{'in':showRolePermissionModel}" class="modal fade" :style="{zIndex:(showRolePermissionModel?undefined:-1)}"
+				style="display:block;overflow-y:auto;">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">
+								role-permission
+							</h4>
+						</div>
+						<div class="modal-body">
+							<label>{{submitData.permission_name}}</label>
+							<button type="button" class="btn btn-default" @click="showPermissionModel=true">choose permission</button>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" @click="showRolePermissionModel=false">close</button>
+							<button :disabled="submitting" type="button" class="btn btn-success" @click="submitRolePermission">confirm</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<div :class="{'in':showPermissionModel}" class="modal fade" :style="{zIndex:(showPermissionModel?undefined:-1)}" style="display:block;overflow-y:auto;">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">
+								add permission
+							</h4>
+						</div>
+						<div class="modal-body">
+							<permission-setting :selectable="selectable"></permission-setting>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" @click="showPermissionModel=false">close</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+		</div>
+	</div>
 </template>
 <script>
     import VueStrapTable from './extend/vue-strap-table'

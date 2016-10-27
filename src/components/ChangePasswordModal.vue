@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container-fluid container-limited">
 		<modal :show.sync="show" effect="fade" width="400">
 			<div slot="modal-header" class="modal-header">
 				<h4 class="modal-title">

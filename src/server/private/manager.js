@@ -176,6 +176,10 @@ var exec = {
         }).then((result) => {
             return result
         })
+    },
+    submitAnswer(req, res, next) {
+        var answer = require("../../db/models/answer")
+        return answer.upsert(req.body)
     }
 }
 
