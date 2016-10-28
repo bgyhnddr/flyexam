@@ -1,16 +1,18 @@
 <template>
 	<div class="container-fluid container-limited">
 		<div v-if="checkPermission(['manager'])">
+			<button @click="addExam()" class="btn btn-default">添加</button>
 			<div v-for="row of exams">
 				<div class="panel panel-default">
 					<div v-if="row.edit" class="panel-heading">
-						<input v-model="row.name"></input>
-						<button class="btn btn-default btn-xs">保存</button>
-						<button @click="row.edit=false" class="btn btn-default btn-xs">取消</button>
+						<input v-model="row.submitData.name"></input>
+						<button :disabled="row.editing" v-if="vaild(row)" @click="submitExam(row)" class="btn btn-default btn-xs">保存</button>
+						<button :disabled="row.editing" @click="row.edit=false" class="btn btn-default btn-xs">取消</button>
 					</div>
 					<div v-else class="panel-heading">
 						<span>{{row.name}}</span>
 						<button @click="editExam(row)" class="btn btn-default btn-xs">修改</button>
+						<button :disabled="row.editing" @click="deleteExam(row,$index)" class="btn btn-default btn-xs">删除</button>
 					</div>
 					<div v-if="row.edit" class="panel-body">
 						<bs-input :value.sync="row.submitData.time_limit" label="时限" type="number"></bs-input>
@@ -57,13 +59,24 @@
         },
         methods: {
             checkPermission,
+            vaild(row) {
+                return row.submitData.name &&
+                    row.submitData.time_limit > 0 &&
+                    row.submitData.exam_subjects &&
+                    row.submitData.exam_subjects.length > 0 &&
+                    row.submitData.exam_subjects.reduce((a, b) => {
+                        return a + parseInt(b.question_count)
+                    }, 0) > 0
+            },
             getExams() {
                 var that = this
                 return manager.getExams().then((result) => {
                     that.exams = result.map((o) => {
                         o.edit = false
+                        o.editing = false
                         o.submitData = {
                             id: o.id,
+                            name: o.name,
                             time_limit: o.time_limit,
                             selected: o.exam_subjects.map(es => es.subject.id),
                             exam_subjects: o.exam_subjects.map((d) => {
@@ -88,7 +101,7 @@
                         }
                     })
                 }).catch(function(err) {
-                    that.errMsg = err
+                    window.alert(err)
                 })
             },
             countScore(row) {
@@ -99,6 +112,7 @@
             editExam(row) {
                 row.submitData = {
                     id: row.id,
+                    name: row.name,
                     time_limit: row.time_limit,
                     selected: row.exam_subjects.map(es => es.subject.id),
                     exam_subjects: row.exam_subjects.map((o) => {
@@ -110,6 +124,20 @@
                     })
                 }
                 row.edit = true
+            },
+            submitExam(row) {
+                row.editing = true
+                manager.submitExam(row.submitData).then(function(result) {
+                    row.id = result.id
+                    row.name = result.name
+                    row.time_limit = result.time_limit
+                    row.exam_subjects = result.exam_subjects
+                    row.edit = false
+                    row.editing = false
+                }).catch(function(err) {
+                    row.editing = false
+                    window.alert(err)
+                })
             },
             getExamSubject(row, id) {
                 return row.exam_subjects.filter(o => o.subject.id == id)[0]
@@ -132,6 +160,45 @@
                     }
                 })
                 row.submitData.exam_subjects = newList
+            },
+            deleteExam(row, index) {
+                var that = this
+                if (confirm("是否确认删除试题:" + row.name)) {
+                    row.edit = true
+                    manager.deleteExam({
+                        id: row.id
+                    }).then(function() {
+                        delete that.exams[index]
+                        that.exams = that.exams.filter(o => o != undefined)
+                        row.edit = false
+                    }).catch(function(err) {
+                        window.alert(err)
+                        row.edit = false
+                    })
+                }
+            },
+            addExam() {
+                var row = {
+                    id: undefined,
+                    name: "",
+                    time_limit: 0,
+                    exam_subjects: [],
+                    edit: true
+                }
+                row.submitData = {
+                    id: row.id,
+                    name: row.name,
+                    time_limit: row.time_limit,
+                    selected: row.exam_subjects.map(es => es.subject.id),
+                    exam_subjects: row.exam_subjects.map((o) => {
+                        return {
+                            subject_id: o.subject.id,
+                            name: o.subject.name,
+                            question_count: o.question_count
+                        }
+                    })
+                }
+                this.exams.unshift(row)
             }
         },
         ready() {

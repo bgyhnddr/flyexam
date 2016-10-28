@@ -36,5 +36,11 @@ export default {
     },
     getExams(params) {
         return request.get(path + 'getExams', params)
+    },
+    submitExam(params) {
+        return request.post(path + 'submitExam', params)
+    },
+    deleteExam(params) {
+        return request.post(path + 'deleteExam', params)
     }
 }
