@@ -251,6 +251,7 @@ var exec = {
         }).then((result) => {
             result.name = req.body.name
             result.time_limit = req.body.time_limit
+            result.comments = req.body.comments
             var newList = []
             req.body.exam_subjects.forEach((o) => {
                 newList.push({

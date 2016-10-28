@@ -2,9 +2,25 @@ export function configRouter(router) {
     router.map({
         '/': {
             component: function(resolve) {
-                require(['../components/Master.vue'], resolve)
+                require(['../components/ExamMaster.vue'], resolve)
             },
-            subRoutes: {}
+            subRoutes: {
+                '': {
+                    component: function(resolve) {
+                        require(['../components/ExamSelect.vue'], resolve)
+                    }
+                },
+                'Exam': {
+                    component: function(resolve) {
+                        require(['../components/ExamSelect.vue'], resolve)
+                    }
+                },
+                'Exam/:id': {
+                    component: function(resolve) {
+                        require(['../components/Exam.vue'], resolve)
+                    }
+                }
+            }
         },
         '/admin': {
             component: function(resolve) {

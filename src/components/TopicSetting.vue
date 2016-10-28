@@ -22,6 +22,7 @@
 							{{es.name}}
 							<bs-input :value.sync="es.question_count" label="题数" type="number"></bs-input>
 						</div>
+                        <bs-input :value.sync="row.submitData.comments" label="备注" type="textarea"></bs-input>
 					</div>
 					<div v-else class="panel-body">
 						<div>时限：{{row.time_limit}}分钟</div>
@@ -32,6 +33,7 @@
 								<span class="badge">{{exam_subject.question_count}}</span>{{exam_subject.subject.name}}
 							</li>
 						</ul>
+                        <bs-input :value.sync="row.comments" label="备注" readonly type="textarea"></bs-input>
 					</div>
 				</div>
 			</div>
@@ -78,6 +80,7 @@
                             id: o.id,
                             name: o.name,
                             time_limit: o.time_limit,
+                            comments: o.comments,
                             selected: o.exam_subjects.map(es => es.subject.id),
                             exam_subjects: o.exam_subjects.map((d) => {
                                 return {
@@ -114,6 +117,7 @@
                     id: row.id,
                     name: row.name,
                     time_limit: row.time_limit,
+                    comments: row.comments,
                     selected: row.exam_subjects.map(es => es.subject.id),
                     exam_subjects: row.exam_subjects.map((o) => {
                         return {
@@ -131,6 +135,7 @@
                     row.id = result.id
                     row.name = result.name
                     row.time_limit = result.time_limit
+                    row.comments = result.comments
                     row.exam_subjects = result.exam_subjects
                     row.edit = false
                     row.editing = false
@@ -182,6 +187,7 @@
                     id: undefined,
                     name: "",
                     time_limit: 0,
+                    comments: "",
                     exam_subjects: [],
                     edit: true
                 }

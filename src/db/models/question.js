@@ -4,7 +4,7 @@ var sequelize = require('../sequelize')
 var question = sequelize.define(
     'question', {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-        content: { type: Sequelize.STRING, unique: true },
+        content: { type: Sequelize.STRING },
         subject_id: Sequelize.INTEGER
     }, {
         underscored: true
