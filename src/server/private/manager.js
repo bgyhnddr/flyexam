@@ -182,6 +182,17 @@ var exec = {
         var answer = require("../../db/models/answer")
         return answer.upsert(req.body)
     },
+    deleteAnswer(req, res, next) {
+        var answer = require("../../db/models/answer")
+        var answer = require("../../db/models/answer")
+        return answer.destroy({
+            where: {
+                id: req.body.id
+            }
+        }).then(() => {
+            return "success"
+        })
+    },
     getExams(req, res, next) {
         var exam = require("../../db/models/exam")
         var exam_subject = require("../../db/models/exam_subject")

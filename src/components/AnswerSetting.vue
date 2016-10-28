@@ -26,7 +26,7 @@
 						<tr v-for="row of question.answers">
 							<td>
 								<div v-if="row.type=='img'">
-									<img style="width:200px" src="{{'/service/private/upload/getAttachment?id=' + row.value}}" />
+									<img style="width:200px" :src="getImg(row.value)" />
 								</div>
 								<div v-else>
 									{{ row.value }}
@@ -37,7 +37,7 @@
 							</td>
 							<td>
 								<button @click="editAnswer(row)" class="btn btn-default btn-xs">修改</button>
-								<button class="btn btn-default btn-xs">删除</button>
+								<button @click="deleteAnswer(row)" class="btn btn-default btn-xs">删除</button>
 							</td>
 						</tr>
 						<tr>
@@ -67,7 +67,7 @@
 					</div>
 					<bs-input v-if="submitData.type=='string'" :value.sync="submitData.value" label="答案"></bs-input>
 					<div v-if="submitData.type=='img'">
-						<img style="width:200px" src="{{'/service/private/upload/getAttachment?id=' + submitData.value}}" />
+						<img style="width:200px" :src="getImg(submitData.value)" />
 						<vue-strap-upload :file-id.sync="submitFileId"></vue-strap-upload>
 					</div>
 					<checkbox :checked.sync="submitRight" value="checked" type="primary">正确</checkbox>
@@ -156,6 +156,9 @@
         },
         methods: {
             checkPermission,
+            getImg(id) {
+                return '/service/private/upload/getAttachment?id=' + id
+            },
             getQuestionAnswers() {
                 var that = this
                 return manager.getQuestionAnswers({
@@ -196,6 +199,18 @@
                     right: row.right
                 }
                 this.showAnswerModel = true
+            },
+            deleteAnswer(row) {
+                var that = this
+                if (window.confirm("是否确认删除答案")) {
+                    manager.deleteAnswer({
+                        id: row.id
+                    }).then((result) => {
+                        that.getQuestionAnswers()
+                    }).catch(function(err) {
+                        window.alert(err)
+                    })
+                }
             },
             valid() {
 

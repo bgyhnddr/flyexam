@@ -31,6 +31,9 @@ export default {
     submitAnswer(params) {
         return request.post(path + 'submitAnswer', params)
     },
+    deleteAnswer(params) {
+        return request.post(path + 'deleteAnswer', params)
+    },
     getExams(params) {
         return request.get(path + 'getExams', params)
     }
