@@ -6,8 +6,10 @@
 			</div>
 			<div class="panel-body">
 				<div class="answer-sheet">
-					<div v-for="row of data" class="col-sm-1 text-center answer-cell" v-bind:class="{ 'answer-cell-done': row.done }">
-						{{$index+1}}
+					<div v-for="row of questions">
+						<div @click="clickAnswer(row,$index)" class="col-sm-1 text-center answer-cell {{getCellClass(row)}}">
+							{{$index+1}}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -16,18 +18,46 @@
 </template>
 <script>
     export default {
-        data() {
-            return {
-                data: []
+        props: {
+            questions: {
+                type: Array,
+                default: []
+            },
+            timeup: {
+                type: Boolean,
+                default: false
+            },
+            activeIndex: {
+                type: Number,
+                default: 0
             }
         },
-        ready() {
-            for (var i = 0; i < 155; i++) {
-                this.data.push({
-                    done: false
-                })
+        data() {
+            return {}
+        },
+        methods: {
+            getCellClass(row) {
+                if (this.timeup) {
+                    if (row.answers.filter((o) => {
+                            return o.value == row.choose && o.right
+                        }).length > 0) {
+                        return "answer-cell-done"
+                    } else {
+                        return "answer-cell-wrong"
+                    }
+                } else {
+                    if (row.choose) {
+                        return "answer-cell-done"
+                    } else {
+                        return ""
+                    }
+                }
+            },
+            clickAnswer(row, index) {
+                this.activeIndex = index
             }
-        }
+        },
+        ready() {}
     }
 </script>
 <style>
@@ -54,5 +84,10 @@
     
     .answer-cell-done {
         background-color: yellow;
+    }
+    
+    .answer-cell-wrong {
+        color: white;
+        background-color: red;
     }
 </style>

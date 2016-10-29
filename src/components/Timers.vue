@@ -32,7 +32,7 @@
             },
             limit: {
                 type: Number,
-                default: 1
+                default: 0.1
             },
             timeup: {
                 type: Boolean,

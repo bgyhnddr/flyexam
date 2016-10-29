@@ -16,18 +16,89 @@ var exec = {
         })
     },
     getExam(req, res, next) {
+        var shuffle = (array) => {
+            var currentIndex = array.length,
+                temporaryValue, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
+        var sequelize = require('sequelize')
         var exam = require("../../db/models/exam")
         var exam_subject = require("../../db/models/exam_subject")
         var subject = require("../../db/models/subject")
         var question = require("../../db/models/question")
         var answer = require("../../db/models/answer")
+        subject.hasMany(exam_subject)
+        exam_subject.belongsTo(exam)
 
-        exam.hasMany(exam_subject)
-        exam_subject.belongsTo(subject)
-        subject.hasMany(question)
         question.hasMany(answer)
 
+        subject.hasMany(exam_subject)
+        return subject.findAll({
+            include: {
+                model: exam_subject,
+                include: {
+                    model: exam,
+                    where: {
+                        id: req.query.id
+                    }
+                }
+            }
+        }).then((resultList) => {
+            if (resultList.length > 0) {
+                var findList = []
+                resultList.forEach((result) => {
+                    result.exam_subjects.forEach((o) => {
+                        findList.push(question.findAll({
+                            include: answer,
+                            where: {
+                                subject_id: o.subject_id
+                            },
+                            limit: o.question_count
+                        }))
+                    })
+                })
+                return Promise.all(findList)
+            } else {
+                return Promise.reject("not found")
+            }
+        }).then((result) => {
+            var returnList = []
+            result.forEach((o) => {
+                o.forEach((q) => {
+                    var ans = []
+                    q.answers.forEach((a) => {
+                        ans.push({
+                            right: a.right,
+                            type: a.type,
+                            value: a.value
+                        })
+                    })
+                    ans = shuffle(ans)
 
+                    var item = {
+                        content: q.content,
+                        answers: ans
+                    }
+                    returnList.push(item)
+                })
+            })
+
+            return shuffle(returnList)
+        })
     }
 }
 
