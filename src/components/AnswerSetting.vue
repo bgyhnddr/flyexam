@@ -26,7 +26,7 @@
 						<tr v-for="row of question.answers">
 							<td>
 								<div v-if="row.type=='img'">
-									<img style="width:200px" src="{{'/service/private/upload/getAttachment?id=' + row.value}}" />
+									<img style="width:200px" :src="getImg(row.value)" />
 								</div>
 								<div v-else>
 									{{ row.value }}
@@ -36,8 +36,8 @@
 								{{ row.right?'是':'否' }}
 							</td>
 							<td>
-								<button class="btn btn-default btn-xs">修改</button>
-								<button class="btn btn-default btn-xs">删除</button>
+								<button @click="editAnswer(row)" class="btn btn-default btn-xs">修改</button>
+								<button @click="deleteAnswer(row)" class="btn btn-default btn-xs">删除</button>
 							</td>
 						</tr>
 						<tr>
@@ -67,8 +67,10 @@
 					</div>
 					<bs-input v-if="submitData.type=='string'" :value.sync="submitData.value" label="答案"></bs-input>
 					<div v-if="submitData.type=='img'">
-						<vue-strap-upload :file-id.sync="submitData.value"></vue-strap-upload>
+						<img style="width:200px" :src="getImg(submitData.value)" />
+						<vue-strap-upload :file-id.sync="submitFileId"></vue-strap-upload>
 					</div>
+					<checkbox :checked.sync="submitRight" value="checked" type="primary">正确</checkbox>
 				</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default" @click="showAnswerModel=false">关闭</button>
@@ -88,7 +90,8 @@
         alert,
         input as bsInput,
         select as vSelect,
-        option as vOption
+        option as vOption,
+        checkbox
     } from 'vue-strap'
 
     export default {
@@ -99,6 +102,7 @@
             bsInput,
             vSelect,
             vOption,
+            checkbox,
             VueStrapUpload
         },
         data() {
@@ -106,12 +110,13 @@
                 question: {},
                 submitData: {
                     id: undefined,
-                    type: "",
+                    type: "string",
                     value: "",
                     right: false
                 },
                 showAnswerModel: false,
-                serverMsg: ""
+                serverMsg: "",
+                submitting: false
             }
         },
         computed: {
@@ -127,10 +132,33 @@
                     returnText = "请填入数据"
                 }
                 return returnText
+            },
+            submitFileId: {
+                // getter
+                get: function() {
+                    return parseInt(this.submitData.value)
+                },
+                // setter
+                set: function(newValue) {
+                    this.submitData.value = newValue
+                }
+            },
+            submitRight: {
+                // getter
+                get: function() {
+                    return this.submitData.right ? "checked" : null
+                },
+                // setter
+                set: function(newValue) {
+                    this.submitData.right = newValue == "checked"
+                }
             }
         },
         methods: {
             checkPermission,
+            getImg(id) {
+                return '/service/private/upload/getAttachment?id=' + id
+            },
             getQuestionAnswers() {
                 var that = this
                 return manager.getQuestionAnswers({
@@ -142,10 +170,47 @@
                 })
             },
             submitAnswer() {
-
+                var that = this
+                that.submitting = true
+                manager.submitAnswer(that.submitData).then(() => {
+                    that.submitting = false
+                    that.showAnswerModel = false
+                    that.getQuestionAnswers()
+                }).catch((err) => {
+                    window.alert(err)
+                    that.submitting = false
+                })
             },
             addAnswer() {
+                this.submitData = {
+                    id: undefined,
+                    type: "string",
+                    value: "",
+                    right: false,
+                    question_id: this.$route.params.question
+                }
                 this.showAnswerModel = true
+            },
+            editAnswer(row) {
+                this.submitData = {
+                    id: row.id,
+                    type: row.type,
+                    value: row.value,
+                    right: row.right
+                }
+                this.showAnswerModel = true
+            },
+            deleteAnswer(row) {
+                var that = this
+                if (window.confirm("是否确认删除答案")) {
+                    manager.deleteAnswer({
+                        id: row.id
+                    }).then((result) => {
+                        that.getQuestionAnswers()
+                    }).catch(function(err) {
+                        window.alert(err)
+                    })
+                }
             },
             valid() {
 

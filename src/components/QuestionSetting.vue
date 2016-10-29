@@ -5,12 +5,12 @@
 				<li><a v-link="{ path: '/admin/ExamManagement/Subject' }">题目类型</a></li>
 				<li class="active">{{$route.params.subject}}</li>
 			</ol>
-            <button @click="addQuestion" class="btn btn-default">添加题目</button>
+			<button @click="addQuestion" class="btn btn-default">添加题目</button>
 			<div style="position:relative">
 				<spinner size="md" text="loading..."></spinner>
 				<vue-strap-table :err-msg.sync="errMsg" :data.sync="data" :get-data-event="getData" :columns="columns"></vue-strap-table>
 			</div>
-            <modal :show.sync="showQuestionModel" effect="fade" width="400">
+			<modal :show.sync="showQuestionModel" effect="fade" width="400">
 				<div slot="modal-header" class="modal-header">
 					<h4 class="modal-title">
 						题目
@@ -177,7 +177,12 @@
                 that.$broadcast('show::spinner')
                 manager.getQuestions(that.$route.params.subject, pageNum, countPerPage, filterKey).then(function(result) {
                     that.$broadcast('hide::spinner')
-                    that.data = result
+                    if (append) {
+                        that.data.end = result.end
+                        that.data.list = that.data.list.concat(result.list)
+                    } else {
+                        that.data = result
+                    }
                 }).catch(function(err) {
                     that.errMsg = err
                     that.$broadcast('hide::spinner')
