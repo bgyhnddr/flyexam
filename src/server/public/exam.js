@@ -1,3 +1,23 @@
+var shuffle = (array) => {
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
 var exec = {
     getExams(req, res, next) {
         var exam = require("../../db/models/exam")
@@ -16,25 +36,6 @@ var exec = {
         })
     },
     getExam(req, res, next) {
-        var shuffle = (array) => {
-            var currentIndex = array.length,
-                temporaryValue, randomIndex;
-
-            // While there remain elements to shuffle...
-            while (0 !== currentIndex) {
-
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex -= 1;
-
-                // And swap it with the current element.
-                temporaryValue = array[currentIndex];
-                array[currentIndex] = array[randomIndex];
-                array[randomIndex] = temporaryValue;
-            }
-
-            return array;
-        }
         var sequelize = require('sequelize')
         var exam = require("../../db/models/exam")
         var exam_subject = require("../../db/models/exam_subject")
@@ -98,6 +99,68 @@ var exec = {
             })
 
             return shuffle(returnList)
+        })
+    },
+    getSubject(req, res, next) {
+        var subject = require("../../db/models/subject")
+        var question = require("../../db/models/question")
+        var answer = require("../../db/models/answer")
+
+        subject.hasMany(question)
+        question.hasMany(answer)
+
+        return subject.findOne({
+            include: {
+                model: question,
+                include: answer
+            },
+            where: {
+                id: req.query.id
+            }
+        }).then((result) => {
+            if (result != null) {
+                return {
+                    name: result.name,
+                    questions: shuffle(result.questions.map((q) => {
+                        var ans = []
+                        ans = q.answers.map((a) => {
+                            return {
+                                right: a.right,
+                                value: a.value,
+                                type: a.type
+                            }
+                        })
+
+                        return {
+                            content: q.content,
+                            answers: shuffle(ans)
+                        }
+                    }))
+                }
+            } else {
+                return Promise.reject("not found")
+            }
+        })
+    },
+    getSubjects(req, res, next) {
+        var subject = require("../../db/models/subject")
+        var question = require("../../db/models/question")
+        subject.hasMany(question)
+        return subject.findAll({
+            include: question
+        }).then((result) => {
+            if (result != null) {
+                return result.map((s) => {
+                    return {
+                        id: s.id,
+                        name: s.name,
+                        comments: s.comments,
+                        question_count: s.questions.length
+                    }
+                })
+            } else {
+                return Promise.reject("not found")
+            }
         })
     }
 }

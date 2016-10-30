@@ -19,6 +19,16 @@ export function configRouter(router) {
                     component: function(resolve) {
                         require(['../components/Exam.vue'], resolve)
                     }
+                },
+                'Practice': {
+                    component: function(resolve) {
+                        require(['../components/PracticeSelect.vue'], resolve)
+                    }
+                },
+                'Practice/:id': {
+                    component: function(resolve) {
+                        require(['../components/Practice.vue'], resolve)
+                    }
                 }
             }
         },
