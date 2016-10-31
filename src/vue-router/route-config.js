@@ -1,34 +1,22 @@
 export function configRouter(router) {
     router.map({
         '/': {
-            component: function(resolve) {
-                require(['../components/ExamMaster.vue'], resolve)
-            },
+            component: require('../components/ExamMaster.vue'),
             subRoutes: {
                 '': {
-                    component: function(resolve) {
-                        require(['../components/ExamSelect.vue'], resolve)
-                    }
+                    component: require('../components/ExamSelect.vue')
                 },
                 'Exam': {
-                    component: function(resolve) {
-                        require(['../components/ExamSelect.vue'], resolve)
-                    }
+                    component: require('../components/ExamSelect.vue')
                 },
                 'Exam/:id': {
-                    component: function(resolve) {
-                        require(['../components/Exam.vue'], resolve)
-                    }
+                    component: require('../components/Exam.vue')
                 },
                 'Practice': {
-                    component: function(resolve) {
-                        require(['../components/PracticeSelect.vue'], resolve)
-                    }
+                    component: require('../components/PracticeSelect.vue')
                 },
                 'Practice/:id': {
-                    component: function(resolve) {
-                        require(['../components/Practice.vue'], resolve)
-                    }
+                    component: require('../components/Practice.vue')
                 }
             }
         },
