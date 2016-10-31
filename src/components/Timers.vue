@@ -68,7 +68,6 @@
                 }
 
                 setTimeout(this.countLeftTime, 1000)
-                console.log(1)
             }
         },
         components: {
