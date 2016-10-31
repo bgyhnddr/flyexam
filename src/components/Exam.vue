@@ -1,7 +1,8 @@
 <template>
 	<div class="container-fluid container-limited">
         <button class="btn btn-default" @click="$route.router.go('/Exam')">离开考试</button>
-		<timers :timeup.sync="timeup"></timers>
+		<timers :limit.sync="limit" :timeup.sync="timeup"></timers>
+        <h3>{{name}}</h3>
         <h3>得分：{{score}}</h3>
         <answer-sheet :timeup.sync="timeup" :questions.sync="questions" :active-index.sync="activeIndex"></answer-sheet>
         <question :timeup.sync="timeup" :questions.sync="questions" :active-index.sync="activeIndex"></question>
@@ -23,7 +24,9 @@
             return {
                 activeIndex: 0,
                 questions: [],
-                timeup: false
+                timeup: false,
+                limit: 0,
+                name: ""
             }
         },
         computed: {
@@ -48,7 +51,9 @@
                 return exam.getExam({
                     id: id
                 }).then((result) => {
-                    that.questions = result.map(o => {
+                    that.limit = result.limit
+                    that.name = result.name
+                    that.questions = result.questions.map(o => {
                         o.choose = ""
                         return o
                     })

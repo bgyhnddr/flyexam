@@ -24,7 +24,7 @@
             },
             counting: {
                 type: Boolean,
-                default: true
+                default: false
             },
             beginTime: {
                 type: Object,
@@ -32,7 +32,7 @@
             },
             limit: {
                 type: Number,
-                default: 0.1
+                default: 0
             },
             timeup: {
                 type: Boolean,
@@ -42,41 +42,43 @@
         computed: {},
         methods: {
             countLeftTime() {
-                var now = new Date()
-                var timespan = now - this.beginTime
+                if (this.counting) {
+                    var now = new Date()
+                    var timespan = now - this.beginTime
 
-                var limit = this.limit * 1000 * 60
-                var leftTime = limit - timespan
+                    var limit = this.limit * 1000 * 60
+                    var leftTime = limit - timespan
 
-                this.now = leftTime / limit * 100
-                if (leftTime < 0) {
-                    this.timeLeft = "00:00"
-                    this.timeup = true
-                    this.counting = false
-                    this.now = 0
-                } else {
-                    var minute = leftTime / 1000 / 60
-                    var lm = Math.floor(minute)
-                    var ls = Math.round((minute - lm) * 60)
-                    ls = ls.toString().length == 1 ? "0" + ls.toString() : ls
-                    lm = lm.toString().length == 1 ? "0" + lm.toString() : lm
+                    this.now = leftTime / limit * 100
+                    if (leftTime < 0) {
+                        this.timeLeft = "00:00"
+                        this.timeup = true
+                        this.counting = false
+                        this.now = 0
+                    } else {
+                        var minute = leftTime / 1000 / 60
+                        var lm = Math.floor(minute)
+                        var ls = Math.round((minute - lm) * 60)
+                        ls = ls.toString().length == 1 ? "0" + ls.toString() : ls
+                        lm = lm.toString().length == 1 ? "0" + lm.toString() : lm
 
-                    this.timeLeft = lm + ":" + ls
-                    this.timeup = false
-
-                    if (this.counting) {
-                        setTimeout(this.countLeftTime, 1000)
+                        this.timeLeft = lm + ":" + ls
+                        this.timeup = false
                     }
                 }
+
+                setTimeout(this.countLeftTime, 1000)
+                console.log(1)
             }
         },
         components: {
             progressbar
         },
         watch: {
-            'counting': function(val) {
-                if (val) {
-                    this.countLeftTime()
+            'limit': function(val) {
+                if (this.val != 0) {
+                    this.counting = true
+                    this.beginTime = new Date()
                 }
             }
         },
@@ -84,9 +86,7 @@
             if (this.beginTime == undefined) {
                 this.beginTime = new Date()
             }
-            if (this.counting) {
-                this.countLeftTime()
-            }
+            this.countLeftTime()
         }
     }
 </script>

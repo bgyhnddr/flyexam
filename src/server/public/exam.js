@@ -42,44 +42,39 @@ var exec = {
         var subject = require("../../db/models/subject")
         var question = require("../../db/models/question")
         var answer = require("../../db/models/answer")
-        subject.hasMany(exam_subject)
-        exam_subject.belongsTo(exam)
-
+        exam.hasMany(exam_subject)
+        exam_subject.belongsTo(subject)
+        subject.hasMany(question)
         question.hasMany(answer)
 
-        subject.hasMany(exam_subject)
-        return subject.findAll({
+
+
+
+        return exam.findOne({
             include: {
                 model: exam_subject,
                 include: {
-                    model: exam,
-                    where: {
-                        id: req.query.id
+                    model: subject,
+                    include: {
+                        model: question,
+                        include: answer
                     }
                 }
+            },
+            where: {
+                id: req.query.id
             }
-        }).then((resultList) => {
-            if (resultList.length > 0) {
-                var findList = []
-                resultList.forEach((result) => {
-                    result.exam_subjects.forEach((o) => {
-                        findList.push(question.findAll({
-                            include: answer,
-                            where: {
-                                subject_id: o.subject_id
-                            },
-                            limit: o.question_count
-                        }))
-                    })
-                })
-                return Promise.all(findList)
+        }).then((result) => {
+            if (result != null) {
+                return result
             } else {
                 return Promise.reject("not found")
             }
         }).then((result) => {
-            var returnList = []
-            result.forEach((o) => {
-                o.forEach((q) => {
+            var questionList = []
+            result.exam_subjects.forEach((o) => {
+                var tempList = []
+                o.subject.questions.forEach((q) => {
                     var ans = []
                     q.answers.forEach((a) => {
                         ans.push({
@@ -94,11 +89,16 @@ var exec = {
                         content: q.content,
                         answers: ans
                     }
-                    returnList.push(item)
+                    tempList.push(item)
                 })
+                
+                questionList = questionList.concat(shuffle(tempList).slice(0, o.question_count))
             })
-
-            return shuffle(returnList)
+            return {
+                limit: result.time_limit,
+                name: result.name,
+                questions: shuffle(questionList)
+            }
         })
     },
     getSubject(req, res, next) {
