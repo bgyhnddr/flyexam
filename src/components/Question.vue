@@ -7,9 +7,8 @@
 			<div class="panel-body">
 				<div v-for="row in questions">
 					<div v-if="$index == activeIndex">
-						<h4>{{row.content}}{{row.choose}}</h4>
-                        
-						<radio v-for="a in row.answers" type="primary" :disabled="timeup" :checked.sync="row.choose" :value="a.value">
+						<h4>{{row.content}}</h4>
+                        <radio v-for="a in row.answers" type="primary" :disabled="timeup" :checked.sync="row.choose" :value="a.value">
 							<img v-if="a.type=='img'" :src="getImg(a.value)"></img>
 							<span v-if="a.type=='string'">{{a.value}}</span>
                             <span v-if="a.right&&timeup" class="glyphicon glyphicon-ok pull-right animated shake hidden-xs hidden-sm"></span>
