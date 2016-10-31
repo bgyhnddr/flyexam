@@ -10,7 +10,9 @@
 					<div v-if="$index == activeIndex">
 						<h4>{{row.content}}</h4>
 						<radio v-for="a in row.answers" type="primary" :disabled="row.done" :checked.sync="row.choose" :value="a.value">
-							{{a.value}}<span v-if="a.right&&row.done" class="glyphicon glyphicon-ok pull-right animated shake hidden-xs hidden-sm"></span>
+							<img :style="a.right&&row.done?'border:3px solid':'';" v-if="a.type=='img'" :src="getImg(a.value)"></img>
+							<span v-if="a.type=='string'">{{a.value}}</span>
+                            <span v-if="a.right&&row.done" class="glyphicon glyphicon-ok pull-right animated shake hidden-xs hidden-sm"></span>
 						</radio>
 					</div>
 				</div>
@@ -78,6 +80,9 @@
                 }).catch((err) => {
                     window.alert(err)
                 })
+            },
+            getImg(id) {
+                return '/service/public/upload/getAttachment?id=' + id
             }
         },
         watch: {},
