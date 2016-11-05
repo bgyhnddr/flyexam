@@ -71,6 +71,11 @@ export function configRouter(router) {
                             component: function(resolve) {
                                 require(['../components/TopicSetting.vue'], resolve)
                             }
+                        },
+                        'ImportQuestion': {
+                            component: function(resolve) {
+                                require(['../components/ImportQuestion.vue'], resolve)
+                            }
                         }
                     }
                 }

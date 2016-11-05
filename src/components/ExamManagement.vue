@@ -9,6 +9,9 @@
 				<li>
 					<a v-link="{ path: '/admin/ExamManagement/Topic' }">考试类型管理</a>
 				</li>
+				<li>
+					<a v-link="{ path: '/admin/ExamManagement/ImportQuestion' }">题目导入</a>
+				</li>
 			</navbar>
 			<router-view transition="vux-pop-in"></router-view>
 		</div>

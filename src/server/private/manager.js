@@ -1,3 +1,93 @@
+var dealExcel = (data) => {
+    var subject = require("../../db/models/subject")
+    var question = require("../../db/models/question")
+    var answer = require("../../db/models/answer")
+    question.hasMany(answer)
+
+    var subjects = []
+
+    data.forEach((o) => {
+        if (!subjects.some(s => s == o["题库类型"])) {
+            subjects.push(o["题库类型"])
+        }
+    })
+
+
+
+    return Promise.all(subjects.map((o) => {
+        return subject.findOne({
+            where: {
+                name: o
+            }
+        }).then((result) => {
+            if (result != null) {
+                return result
+            } else {
+                return subject.create({ name: o })
+            }
+        })
+    })).then((result) => {
+        var obj = {}
+        result.forEach(o => obj[o.name] = o.id)
+        return obj
+    }).then((sub) => {
+        return Promise.all(data.map((o) => {
+            return question.findOne({
+                include: answer,
+                where: {
+                    content: o["题目"],
+                    subject_id: sub[o["题库类型"]]
+                }
+            }).then((q) => {
+                if (q != null) {
+                    return Promise.all(q.answers.map(a => a.destroy())).then(() => {
+                        var alist = [{
+                            right: true,
+                            type: "string",
+                            value: o["正确答案"],
+                            question_id: q.id
+                        }]
+
+                        o["错误答案"].split('|').forEach((ea) => {
+                            alist.push({
+                                right: false,
+                                type: "string",
+                                value: ea,
+                                question_id: q.id
+                            })
+                        })
+
+                        return answer.bulkCreate(alist)
+                    })
+                } else {
+                    return question.create({
+                        content: o["题目"],
+                        subject_id: sub[o["题库类型"]]
+                    }).then((cq) => {
+                        var alist = [{
+                            right: true,
+                            type: "string",
+                            value: o["正确答案"],
+                            question_id: cq.id
+                        }]
+
+                        o["错误答案"].split('|').forEach((ea) => {
+                            alist.push({
+                                right: false,
+                                type: "string",
+                                value: ea,
+                                question_id: cq.id
+                            })
+                        })
+
+                        return answer.bulkCreate(alist)
+                    })
+                }
+            })
+        }))
+    })
+}
+
 var exec = {
     getSubjects(req, res, next) {
         var subject = require("../../db/models/subject")
@@ -296,6 +386,41 @@ var exec = {
                 ])
             } else {
                 return "do nothing"
+            }
+        })
+    },
+    importQuestion(req) {
+        return new Promise(function(resolve, reject) {
+            if (req.method.toLowerCase() == 'post') {
+                var fs = require("fs")
+                var formidable = require('formidable')
+                var XLSX = require('xlsx')
+                var form = new formidable.IncomingForm();
+                form.uploadDir = "upload/import";
+                form.maxFieldsSize = 2; //10G
+                form.hash = "md5"
+
+                if (!fs.existsSync("upload")) {
+                    fs.mkdirSync("upload")
+                }
+
+                if (!fs.existsSync("upload/import")) {
+                    fs.mkdirSync("upload/import")
+                }
+
+                form.on('file', function(name, file) {
+                    var workbook = XLSX.readFile(file.path, { type: "binary" })
+                    dealExcel(XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])).then(() => {
+                        resolve("OK")
+                    })
+                    fs.unlinkSync(file.path)
+                })
+                form.on('error', function(err) {
+                    console.log('error' + err)
+                })
+                form.parse(req)
+            } else {
+                reject("please post")
             }
         })
     }

@@ -24,7 +24,8 @@
     "vue-resource": "^1.0.2",
     "vue-router": "^0.7.13",
     "vue-strap": "^1.1.23",
-    "vuejs-datepicker": "^0.4.7"
+    "vuejs-datepicker": "^0.4.7",
+    "xlsx": "^0.8.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
