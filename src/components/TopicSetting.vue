@@ -16,6 +16,7 @@
 					</div>
 					<div v-if="row.edit" class="panel-body">
 						<bs-input :value.sync="row.submitData.time_limit" label="时限" type="number"></bs-input>
+						<bs-input :value.sync="row.submitData.score" label="总分" type="number"></bs-input>
 						<v-select :options="subjects" multiple options-value="val" :value.sync="row.submitData.selected" @change="selectChange(row)"
 							:clear-button="true"></v-select>
 						<div v-for="es of row.submitData.exam_subjects">
@@ -26,7 +27,7 @@
 					</div>
 					<div v-else class="panel-body">
 						<div>时限：{{row.time_limit}}分钟</div>
-						<div>总分：{{countScore(row)}}</div>
+						<div>总分：{{row.score}}分</div>
 						<div>题类：</div>
 						<ul class="list-group">
 							<li v-for="exam_subject of row.exam_subjects" class="list-group-item">
@@ -64,6 +65,7 @@
             vaild(row) {
                 return row.submitData.name &&
                     row.submitData.time_limit > 0 &&
+                    row.submitData.score > 0 &&
                     row.submitData.exam_subjects &&
                     row.submitData.exam_subjects.length > 0 &&
                     row.submitData.exam_subjects.reduce((a, b) => {
@@ -79,6 +81,7 @@
                         o.submitData = {
                             id: o.id,
                             name: o.name,
+                            score: o.score,
                             time_limit: o.time_limit,
                             comments: o.comments,
                             selected: o.exam_subjects.map(es => es.subject.id),
@@ -116,6 +119,7 @@
                 row.submitData = {
                     id: row.id,
                     name: row.name,
+                    score: row.score,
                     time_limit: row.time_limit,
                     comments: row.comments,
                     selected: row.exam_subjects.map(es => es.subject.id),
@@ -134,6 +138,7 @@
                 manager.submitExam(row.submitData).then(function(result) {
                     row.id = result.id
                     row.name = result.name
+                    row.score = result.score
                     row.time_limit = result.time_limit
                     row.comments = result.comments
                     row.exam_subjects = result.exam_subjects
@@ -187,6 +192,7 @@
                     id: undefined,
                     name: "",
                     time_limit: 0,
+                    score: 0,
                     comments: "",
                     exam_subjects: [],
                     edit: true
@@ -194,6 +200,7 @@
                 row.submitData = {
                     id: row.id,
                     name: row.name,
+                    score: row.score,
                     time_limit: row.time_limit,
                     selected: row.exam_subjects.map(es => es.subject.id),
                     exam_subjects: row.exam_subjects.map((o) => {

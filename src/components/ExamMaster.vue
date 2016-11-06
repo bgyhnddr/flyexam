@@ -2,7 +2,7 @@
 	<navbar type="default">
 		<!-- Brand as slot -->
 		<a slot="brand" href="/" title="Home" class="navbar-brand">
-        模型机模拟考试练习系统
+        珠海腾仁通航模拟考试系统
         </a>
 		<li>
 			<a v-link="{ path: '/Exam' }">考试</a>

@@ -46,7 +46,9 @@
                         return "answer-cell-wrong"
                     }
                 } else {
-                    if (row.choose) {
+                    if (row.mark) {
+                        return "answer-cell-mark"
+                    } else if (row.choose) {
                         return "answer-cell-done"
                     } else {
                         return ""
@@ -61,8 +63,6 @@
     }
 </script>
 <style>
-    .answer-sheet {}
-    
     .answer-cell {
         margin-left: 1px;
         margin-top: 1px;
@@ -83,7 +83,12 @@
     }
     
     .answer-cell-done {
-        background-color: yellow;
+        background-color: yellowgreen;
+    }
+    
+    .answer-cell-mark {
+        color: white;
+        background-color: blue;
     }
     
     .answer-cell-wrong {

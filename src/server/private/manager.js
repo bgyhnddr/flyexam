@@ -341,6 +341,7 @@ var exec = {
         }).then((result) => {
             result.name = req.body.name
             result.time_limit = req.body.time_limit
+            result.score = req.body.score
             result.comments = req.body.comments
             var newList = []
             req.body.exam_subjects.forEach((o) => {
