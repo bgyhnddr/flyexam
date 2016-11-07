@@ -9,10 +9,12 @@
 					<div v-if="$index == activeIndex">
 						<h4>{{row.content}}</h4>
                         <radio v-for="a in row.answers" type="primary" :disabled="timeup" :checked.sync="row.choose" :value="a.value">
+                            <span>{{getABC($index+1)}}、</span>
 							<img v-if="a.type=='img'" :src="getImg(a.value)"></img>
 							<span v-if="a.type=='string'">{{a.value}}</span>
                             <span v-if="a.right&&timeup" class="glyphicon glyphicon-ok pull-right animated shake hidden-xs hidden-sm"></span>
 						</radio>
+                        <checkbox :checked.sync="row.mark" value="mark">标记问题</checkbox>
 					</div>
 				</div>
 			</div>
@@ -27,7 +29,8 @@
 </template>
 <script>
     import {
-        radio
+        radio,
+        checkbox
     } from 'vue-strap'
     export default {
         data() {
@@ -36,7 +39,8 @@
             }
         },
         components: {
-            radio
+            radio,
+            checkbox
         },
         props: {
             questions: {
@@ -69,6 +73,9 @@
             },
             getImg(id) {
                 return '/service/public/upload/getAttachment?id=' + id
+            },
+            getABC(index) {
+                return String.fromCharCode(64 + parseInt(index))
             }
         },
         watch: {},

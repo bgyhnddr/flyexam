@@ -91,12 +91,13 @@ var exec = {
                     }
                     tempList.push(item)
                 })
-                
+
                 questionList = questionList.concat(shuffle(tempList).slice(0, o.question_count))
             })
             return {
                 limit: result.time_limit,
                 name: result.name,
+                score: result.score,
                 questions: shuffle(questionList)
             }
         })

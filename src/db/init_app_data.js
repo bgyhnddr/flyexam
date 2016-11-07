@@ -67,11 +67,6 @@ module.exports = function() {
 
 
     return Promise.all([
-        exam.bulkCreate(exams),
-        subject.bulkCreate(subjects),
-        exam_subject.bulkCreate(exam_subjects),
-        question.bulkCreate(questions),
-        answer.bulkCreate(answers),
         user.create({ account: 'manager', password: "manager" }),
         role.create({ code: "manager", name: "manager" }),
         user_role.create({ user_account: "manager", role_code: "manager" }),
