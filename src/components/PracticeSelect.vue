@@ -1,6 +1,6 @@
 <template>
-	<div class="container-fluid container-limited">
-		<div v-for="row of subjects">
+	<div class="container container-limited">
+		<div v-for="row of subjects" class="col-sm-3 text-center">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<span>{{row.name}}</span>

@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid container-limited">
+	<div class="container container-limited">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span>{{subject.name}}</span>
