@@ -5,8 +5,8 @@
 				<div class="col-sm-6">
 					<bs-input :value.sync="filterKey" @keyup.enter="getData" placeholder="keyword" type="text">
 						<span slot="after" class="input-group-btn">
-                            <button type="button" @click="getData" class="btn btn-primary">search</button>
-                            <button type="button" @click="clearFilter" class="btn btn-default">clear</button>
+                            <button type="button" @click="getData" class="btn btn-primary">搜索</button>
+                            <button type="button" @click="clearFilter" class="btn btn-default">清空</button>
                         </span>
 					</bs-input>
 				</div>

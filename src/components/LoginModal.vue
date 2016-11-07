@@ -12,13 +12,13 @@
 					{{alertText}}
 				</alert>
 				<div class="form-group">
-					<label class="control-label">account</label>
+					<label class="control-label">账号</label>
 					<input v-el:account v-model="loginInfo.account" class="form-control"  type="text">
                 </div>
-				<bs-input :value.sync="loginInfo.password" label="password" type="password"></bs-input>
+				<bs-input :value.sync="loginInfo.password" label="密码" type="password"></bs-input>
 			</div>
 			<div slot="modal-footer" class="modal-footer">
-				<button type="button" class="btn btn-success" @click="submitLogin">login</button>
+				<button type="button" class="btn btn-success" @click="submitLogin">登录</button>
 			</div>
 		</modal>
 	</div>
