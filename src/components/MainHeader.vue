@@ -1,8 +1,8 @@
 <template>
 	<navbar type="default">
 		<!-- Brand as slot -->
-		<a slot="brand" href="/" title="Home" class="navbar-brand">
-        管理員系統
+		<a slot="brand" title="Home" class="navbar-brand">
+        管理员系统
         </a>
 		<li v-if="checkPermission()">
 			<a v-link="{ path: '/admin/RBACManagement' }">RBAC</a>
