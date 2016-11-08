@@ -13,6 +13,7 @@ Vue.http.interceptors.push(timei)
 Vue.http.interceptors.push(authCallback)
 dateformat()
 disableHistoryBack()
+require('bootstrap3/dist/css/bootstrap.css')
 
 window.state = {
     userInfo: { name: "", permissions: [] },

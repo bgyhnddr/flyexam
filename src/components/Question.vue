@@ -20,7 +20,7 @@
 			<div class="panel-footer">
 				<div class="text-center" style="overflow:hidden">
 					<button v-if="activeIndex>0" type="button" class="btn btn-success pull-left" @click="prev">上一题</button>
-					<button type="button" class="btn pull-center" v-bind:class="{ 'btn-primary': questions[activeIndex].mark, 'btn-default': !questions[activeIndex].mark }" @click="mark">標記問題</button>
+					<button type="button" class="btn pull-center" v-bind:class="{ 'btn-primary': questions[activeIndex].mark, 'btn-default': !questions[activeIndex].mark }" @click="mark">标记问题</button>
 					<button v-if="activeIndex<questions.length-1" type="button" class="btn btn-success pull-right" @click="next">下一题</button>
 				</div>
 			</div>
