@@ -1,5 +1,5 @@
 <template>
-	<div class="col-sm-10">
+	<div class="col-sm-9">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span>第{{activeIndex+1}}题</span>

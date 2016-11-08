@@ -31,7 +31,6 @@
     import ChangePasswordModal from './ChangePasswordModal'
     import authAPI from '../api/auth'
     import checkPermission from '../extend/check-permission'
-    require('bootstrap3/dist/css/bootstrap.css')
 
     export default {
         data() {

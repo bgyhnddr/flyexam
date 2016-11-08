@@ -1,15 +1,13 @@
 <template>
-	<div class="col-sm-2">
+	<div class="col-sm-3">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span>答题卡</span>
 			</div>
 			<div class="panel-body">
 				<div class="answer-sheet">
-					<div v-for="row of questions">
-						<div @click="clickAnswer(row,$index)" class="col-sm-1 text-center answer-cell {{getCellClass(row)}}">
-							{{$index+1}}
-						</div>
+					<div @click="clickAnswer(row,$index)" v-for="row of questions" class="text-center answer-cell {{getCellClass(row)}}">
+						{{$index+1}}
 					</div>
 				</div>
 			</div>
@@ -64,6 +62,7 @@
 </script>
 <style>
     .answer-cell {
+        display: inline-block;
         margin-left: 1px;
         margin-top: 1px;
         display: inline-block;

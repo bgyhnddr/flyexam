@@ -19,7 +19,6 @@
         dropdown,
         navbar
     } from 'vue-strap'
-    require('bootstrap3/dist/css/bootstrap.css')
 
     export default {
         data() {
