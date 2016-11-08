@@ -5,6 +5,11 @@
     export default {}
 </script>
 <style>
+    html,
+    body {
+        height: 100%
+    }
+    
     .view {
         transition: all .3s ease;
     }
