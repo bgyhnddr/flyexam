@@ -2,7 +2,7 @@
 	<navbar type="default">
 		<!-- Brand as slot -->
 		<a slot="brand" href="/" title="Home" class="navbar-brand">
-        GetStart
+        管理員系統
         </a>
 		<li v-if="checkPermission()">
 			<a v-link="{ path: '/admin/RBACManagement' }">RBAC</a>

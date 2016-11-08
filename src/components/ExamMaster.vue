@@ -11,7 +11,7 @@
 			<a v-link="{ path: '/Practice' }">练习</a>
 		</li>
 	</navbar>
-	<router-view transition="vux-pop-in"></router-view>
+	<router-view></router-view>
 </template>
 
 <script>

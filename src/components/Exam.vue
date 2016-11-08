@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid container-limited">
+	<div class="container container-limited">
         <button class="btn btn-default" @click="$route.router.go('/Exam')">离开考试</button>
         <button v-if="limit" class="btn btn-primary" @click="limit=0">立即交卷</button>
 		<timers :limit.sync="limit" :timeup.sync="timeup"></timers>

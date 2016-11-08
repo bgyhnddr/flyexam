@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid container-limited">
+	<div class="container container-limited">
 		<div v-if="checkPermission(['manager'])">
 			<button @click="addExam()" class="btn btn-default">添加</button>
 			<div v-for="row of exams">

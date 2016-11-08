@@ -1,21 +1,14 @@
 <template>
-	<div class="container-fluid container-limited">
-		<div v-for="row of exams">
+	<div class="container container-limited">
+        <div v-for="row of exams" class="col-sm-3 text-center">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<span>{{row.name}}</span>
-				</div>
+				  </div>
 				<div class="panel-body">
 					<button @click="begin(row)" class="btn btn-default">开始考试</button>
 					<div>时限：{{row.time_limit}}分钟</div>
-					<div>总分：{{countScore(row)}}</div>
-					<div>题类：</div>
-					<ul class="list-group">
-						<li v-for="exam_subject of row.exam_subjects" class="list-group-item">
-							<span class="badge">{{exam_subject.question_count}}</span>{{exam_subject.subject.name}}
-						</li>
-					</ul>
-					<bs-input :value.sync="row.comments" label="备注" readonly type="textarea"></bs-input>
+					<div>总分：{{row.score}}分</div>
 				</div>
 			</div>
 		</div>

@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid container-limited">
+	<div class="container container-limited">
 		<div v-if="checkPermission()">
 			<button @click="addUser" class="btn btn-default">add user</button>
 			<div style="position:relative">

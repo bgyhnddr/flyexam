@@ -14,13 +14,13 @@
 							<span v-if="a.type=='string'">{{a.value}}</span>
                             <span v-if="a.right&&timeup" class="glyphicon glyphicon-ok pull-right animated shake hidden-xs hidden-sm"></span>
 						</radio>
-                        <checkbox :checked.sync="row.mark" value="mark">标记问题</checkbox>
 					</div>
 				</div>
 			</div>
 			<div class="panel-footer">
 				<div class="text-center" style="overflow:hidden">
 					<button v-if="activeIndex>0" type="button" class="btn btn-success pull-left" @click="prev">上一题</button>
+					<button type="button" class="btn pull-center" v-bind:class="{ 'btn-primary': questions[activeIndex].mark, 'btn-default': !questions[activeIndex].mark }" @click="mark">標記問題</button>
 					<button v-if="activeIndex<questions.length-1" type="button" class="btn btn-success pull-right" @click="next">下一题</button>
 				</div>
 			</div>
@@ -76,6 +76,16 @@
             },
             getABC(index) {
                 return String.fromCharCode(64 + parseInt(index))
+            },
+            mark() {
+                var obj = this.questions[this.activeIndex]
+                obj.mark = obj.mark ? "" : "mark"
+                var newObj = {}
+                for (var i in obj) {
+                    newObj[i] = obj[i]
+                }
+
+                this.questions.$set(this.activeIndex, newObj)
             }
         },
         watch: {},
