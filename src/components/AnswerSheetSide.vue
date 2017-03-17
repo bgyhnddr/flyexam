@@ -1,9 +1,6 @@
 <template>
-<div class="col-sm-3 answers-card">
+<div class="answers-card">
 	<div class="panel panel-default">
-		<div class="panel-heading">
-			<span>答题卡</span>
-		</div>
 		<div class="panel-body">
 			<div class="answer-sheet">
 				<div @click="clickAnswer(row,$index)" v-for="row of questions" class="text-center answer-cell {{getCellClass(row)}}">
@@ -28,6 +25,9 @@ export default {
 		activeIndex: {
 			type: Number,
 			default: 0
+		},
+		sideShow: {
+			type: Boolean
 		}
 	},
 	data() {
@@ -55,6 +55,7 @@ export default {
 		},
 		clickAnswer(row, index) {
 			this.activeIndex = index
+			this.sideShow = false
 		}
 	},
 	ready() {}
