@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container container-limited">
 		<div v-if="checkPermission(['manager'])">
 			<navbar type="default">
 				<a slot="brand" class="navbar-brand">考试管理</a>
@@ -13,7 +13,7 @@
 					<a v-link="{ path: '/admin/ExamManagement/ImportQuestion' }">题目导入</a>
 				</li>
 			</navbar>
-			<router-view transition="vux-pop-in"></router-view>
+			<router-view></router-view>
 		</div>
 	</div>
 </template>

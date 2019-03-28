@@ -1,6 +1,6 @@
 <template>
 	<main-header></main-header>
-	<router-view transition="vux-pop-in"></router-view>
+	<router-view></router-view>
 </template>
 
 <script>
