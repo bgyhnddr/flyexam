@@ -1,27 +1,30 @@
-# vuexp
 
-> A Vue.js project
+1.下载nodejs并安装
 
-## Build Setup
+[最新下载地址](https://nodejs.org/zh-cn/)
 
-``` bash
-# install dependencies
-npm install
+装完后输入命令行输入node -v
+能够看到版本号则表示安装成功
 
-# serve with hot reload at localhost:8080
-npm run dev
+2.安装yarn
+命令行输入npm install -g yarn
 
-# build for production with minification
-npm run build
+3.启动服务
+进入项目根目录双击start.bat
+出现Listening at http://localhost:8080
+则表示服务启动成功
 
-# run unit tests
-npm run unit
 
-# run e2e tests
-npm run e2e
+## 本机访问：
+浏览器输入 http://localhost:8080
 
-# run all tests
-npm test
-```
+## 局域网其他机器访问
+请先保证服务器防火墙8080端口打开
+然后 输入 http://{服务器IP地址}:8080
+可以访问
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## 管理员模式
+
+管理员地址：http://localhost:8080/#!/admin
+管理员账号密码：manager manager
