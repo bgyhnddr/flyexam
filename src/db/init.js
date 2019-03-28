@@ -1,6 +1,5 @@
-var Sequelize = require('sequelize')
-module.exports = function(req, res, next) {
-    Promise.all([
+module.exports = function() {
+    return Promise.all([
         require('./models/user'),
         require('./models/role'),
         require('./models/permission'),
@@ -17,9 +16,5 @@ module.exports = function(req, res, next) {
         return require('./init_data')()
     }).then(() => {
         return require('./init_app_data')()
-    }).then(function() {
-        res.send("success")
-    }).catch(function(err) {
-        res.send(err)
     })
 }
